@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class boardController {
+public class BoardController {
 
     @RequestMapping(value = "/baord", method = RequestMethod.POST)
     public String board() {
