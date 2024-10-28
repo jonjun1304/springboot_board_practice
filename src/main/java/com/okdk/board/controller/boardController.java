@@ -11,6 +11,6 @@ public class boardController {
     public String board() {
         
 
-        return "board";
+        return "boarddd";
     }
 }
