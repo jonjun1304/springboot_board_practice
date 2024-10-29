@@ -12,7 +12,7 @@ public class ApiController {
 
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
 
-    @GetMapping("/api/hello")
+    @GetMapping("/api/hello2")
     public String hello() {
         return "Hello World";
     }
