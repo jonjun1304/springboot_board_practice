@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 @Getter
 @Setter
+@Entity
 @Table(name = "article")
 public class Article {
     @Id
