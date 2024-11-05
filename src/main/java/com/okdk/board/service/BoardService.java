@@ -38,7 +38,7 @@ public class BoardService {
 
     // 모든 게시글 조회
     public List<BoardDto> getAllBoards() {
-        return boardRepository.findAll().stream()
+        return boardRepository.findAllByOrderByBoardSeqDesc().stream()
                 .map(this::toDto)
                 .toList();
     }
@@ -49,7 +49,7 @@ public class BoardService {
         return boardRepository.findById(boardSeq).map(existingBoard -> {
             existingBoard.setBoardTitle(boardDto.getBoardTitle());
             existingBoard.setBoardContent(boardDto.getBoardContent());
-            existingBoard.setBoardDttm(boardDto.getBoardDttm());
+            //existingBoard.setBoardDttm(boardDto.getBoardDttm());
             // 필요한 경우 user 정보를 다시 설정할 수도 있습니다.
             Board updatedBoard = boardRepository.save(existingBoard);
             return toDto(updatedBoard);
