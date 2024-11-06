@@ -35,12 +35,23 @@ public class BoardApiController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // 모든 게시글 조회
-    @GetMapping
-    public ResponseEntity<List<BoardDto>> getAllBoards() {
-        List<BoardDto> boards = boardService.getAllBoards();
+    // 모든 게시글 조회 및 검색 기능 추가
+    @GetMapping // 수정됨
+    public ResponseEntity<List<BoardDto>> getAllBoards(
+            @RequestParam(required = false) String title,  // 수정됨
+            @RequestParam String fromDate,  // 수정됨
+            @RequestParam String toDate) {  // 수정됨
+
+        List<BoardDto> boards = boardService.searchBoards(title, fromDate, toDate); // 수정됨
         return new ResponseEntity<>(boards, HttpStatus.OK);
     }
+
+    // 모든 게시글 조회
+//    @GetMapping
+//    public ResponseEntity<List<BoardDto>> getAllBoards() {
+//        List<BoardDto> boards = boardService.getAllBoards();
+//        return new ResponseEntity<>(boards, HttpStatus.OK);
+//    }
 
     // 게시글 수정
     @PutMapping("/{boardSeq}")

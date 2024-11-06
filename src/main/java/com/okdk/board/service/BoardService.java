@@ -43,6 +43,14 @@ public class BoardService {
                 .toList();
     }
 
+    // 모든 게시글 조회 및 검색 (JPA 쿼리 방식) - 수정됨
+    public List<BoardDto> searchBoards(String title, String fromDate, String toDate) { // 수정됨
+        List<Board> boards = boardRepository.searchBoards2(title, fromDate, toDate); // 수정됨
+        return boards.stream()
+                .map(this::toDto)
+                .toList();
+    }
+
     // 게시글 수정
     @Transactional
     public Optional<BoardDto> updateBoard(Long boardSeq, BoardDto boardDto) {

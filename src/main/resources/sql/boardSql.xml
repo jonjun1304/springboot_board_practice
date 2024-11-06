@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm
+                 https://jakarta.ee/xml/ns/persistence/orm/orm_3_0.xsd"
+                 version="3.0">
+    <named-native-query name="Board.searchBoards2" result-class="com.okdk.board.entity.Board">
+        <query>
+            <![CDATA[
+                SELECT *
+                FROM board b
+                WHERE 1=1
+                AND LEFT(b.board_dttm, 8) >= :fromDate
+                AND LEFT(b.board_dttm, 8) <= :toDate
+                AND (
+                    IF(:title IS NULL OR :title = '', TRUE, b.board_title LIKE CONCAT('%', :title, '%'))
+                )
+                ORDER BY b.board_seq DESC
+        ]]>
+        </query>
+    </named-native-query>
+</entity-mappings>
