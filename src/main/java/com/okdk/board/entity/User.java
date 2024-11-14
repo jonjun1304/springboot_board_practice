@@ -27,4 +27,14 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Board> boards;
+
+    @Column(name = "birthday", nullable = true, length = 8)
+    private String birthday;
+
+    @Column(name = "phone_no", nullable = true, length = 11)
+    private String phoneNo;
+
+    @Column(name = "authority_type", nullable = false, length = 10)
+    private String authorityType;
+
 }

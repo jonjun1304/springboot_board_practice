@@ -19,7 +19,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
     // 게시글 생성
     @Transactional

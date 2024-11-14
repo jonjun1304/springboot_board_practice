@@ -20,7 +20,18 @@ public class UserApiController {
     // 로그인 기능
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserDto userDto) {
-        String loginResult = userService.authenticate(userDto.getUserId(), userDto.getUserPassword());
-        return new ResponseEntity<>(loginResult, HttpStatus.OK);
+        return userService.authenticate(userDto.getUserId(), userDto.getUserPassword());
+    }
+
+    // ID 중복 체크
+    @PostMapping("/check-id")
+    public ResponseEntity<String> isUserIdDuplicate(@RequestBody UserDto userDto) {
+        return userService.isUserIdDuplicate(userDto.getUserId());
+    }
+
+    // 회원가입
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+        return userService.createUser(userDto);
     }
 }
