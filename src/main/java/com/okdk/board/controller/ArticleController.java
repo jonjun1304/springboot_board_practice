@@ -1,10 +1,10 @@
 package com.okdk.board.controller;
 
 import com.okdk.board.dto.ArticleForm;
-import com.okdk.board.dto.CommentDto;
+import com.okdk.board.dto.CommentOldDto;
 import com.okdk.board.entity.Article;
 import com.okdk.board.repository.ArticleRepository;
-import com.okdk.board.service.CommentService;
+import com.okdk.board.service.CommentOldService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ public class ArticleController {
     private ArticleRepository articleRepository;
 
     @Autowired
-    private CommentService commentService; // 서비스 객체 주입
+    private CommentOldService commentOldService; // 서비스 객체 주입
 
     @GetMapping("/articles/new")
     public String newArticle() {
@@ -54,7 +54,7 @@ public class ArticleController {
         log.info("id = "+id);
         // 1. id를 조회해 데이터 가져오기
         Article articleEntity = articleRepository.findById(id).orElse(null); // orElse : id값으로 데이터를 찾을 때 해당 id값이 없으면 null을 반환
-        List<CommentDto> commentsDtos = commentService.comments(id);
+        List<CommentOldDto> commentsDtos = commentOldService.comments(id);
         // 2. 모델에 데이터 등록하기
         model.addAttribute("article", articleEntity);
         model.addAttribute("commentDtos", commentsDtos); // 댓글 목록 모델에 등록

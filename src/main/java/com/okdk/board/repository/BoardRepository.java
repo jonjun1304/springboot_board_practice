@@ -1,7 +1,6 @@
 package com.okdk.board.repository;
 
 import com.okdk.board.entity.Board;
-import com.okdk.board.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

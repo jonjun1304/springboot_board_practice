@@ -6,10 +6,10 @@
                  version="3.0">
     <named-native-query
             name="Comment.findByArticleId"
-            result-class="com.okdk.board.entity.Comment">
+            result-class="com.okdk.board.entity.CommentOld">
         <query>
             <![CDATA[
-                    SELECT * FROM comment a WHERE a.article_id = :articleId
+                    SELECT * FROM comment_old a WHERE a.article_id = :articleId
             ]]>
         </query>
     </named-native-query>
