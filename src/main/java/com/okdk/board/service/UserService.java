@@ -75,6 +75,29 @@ public class UserService {
         return ResponseEntity.ok(result);
     }
 
+    // 회원 정보 수정
+    @Transactional
+    public ResponseEntity<String> updateUser(String userId, UserDto userDto) {
+        return userRepository.findById(userId)
+                .map(existingUser -> {
+                    // 기존 사용자 정보 업데이트
+                    existingUser.setUserPassword(userDto.getUserPassword());
+                    existingUser.setPhoneNo(userDto.getPhoneNo());
+                    existingUser.setBirthday(userDto.getBirthday());
+                    // 변경된 엔티티 저장
+                    userRepository.save(existingUser);
+                    return ResponseEntity.status(HttpStatus.OK).body("User updated successfully");
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("USER_NOT_FOUND")); // 사용자 없음
+    }
+
+    // 사용자 조회
+    public ResponseEntity<UserDto> getUserById(String userId) {
+        return userRepository.findByUserId(userId)
+                .map(user -> ResponseEntity.ok(toDto(user)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
     // Entity -> DTO 변환
     private UserDto toDto(User user) {
         return UserDto.builder()

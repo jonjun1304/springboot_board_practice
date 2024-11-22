@@ -3,6 +3,8 @@ package com.okdk.board.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "board")
@@ -14,7 +16,7 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_seq")
+    @Column(name = "board_seq", nullable = false)
     private Long boardSeq;
 
     @Column(name = "board_title", nullable = false, length = 50)
@@ -29,5 +31,8 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    private List<Comment> comments; // 게시글의 댓글들
 
 }
