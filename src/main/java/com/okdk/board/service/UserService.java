@@ -13,6 +13,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,27 +26,27 @@ public class UserService {
     // Java 8 이상에서는 DateTimeFormatter를 사용
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
-    // 사용자 인증
-//    @Transactional
-//    public String authenticate(String userId, String userPassword) {
-//        return userRepository.findByUserId(userId)
-//                .map(user -> user.getUserPassword().equals(userPassword) ? "SUCCESS" : "PASSWORD_INCORRECT")
-//                .orElse("USER_NOT_FOUND");
-//    }
-
     // 사용자 로그인
     @Transactional
-    public ResponseEntity<String> authenticate(String userId, String userPassword) {
-        String result = userRepository.findByUserId(userId)
+    public ResponseEntity<HashMap<String, Object>> authenticate(String userId, String userPassword) {
+        HashMap<String, Object> retMap = new HashMap<String, Object>();
+
+        Optional<User> result = userRepository.findByUserId(userId);
+
+        String resMsg = result
                 .map(user -> {
                     if (user.getUserPassword().equals(userPassword)) {
+                        retMap.put("resUser", toDto(user)); // User 엔티티를 DTO로 변환
                         return "SUCCESS"; // 로그인 성공
                     } else {
                         return "PASSWORD_INCORRECT"; // 비밀번호 불일치
                     }
                 })
                 .orElse("USER_NOT_FOUND"); // 사용자 없음
-        return ResponseEntity.ok(result); // 로그인 성공
+
+        retMap.put("resMsg", resMsg);
+
+        return ResponseEntity.ok(retMap); // 로그인 성공
 
 
 

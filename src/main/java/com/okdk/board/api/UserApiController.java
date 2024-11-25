@@ -3,9 +3,10 @@ package com.okdk.board.api;
 import com.okdk.board.dto.UserDto;
 import com.okdk.board.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/user")
@@ -16,7 +17,7 @@ public class UserApiController {
 
     // 로그인 기능
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<HashMap<String, Object>> login(@RequestBody UserDto userDto) {
         return userService.authenticate(userDto.getUserId(), userDto.getUserPassword());
     }
 
