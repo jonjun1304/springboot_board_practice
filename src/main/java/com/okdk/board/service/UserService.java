@@ -1,8 +1,10 @@
 package com.okdk.board.service;
 
+import com.okdk.board.dto.LoginRequest;
 import com.okdk.board.dto.UserDto;
 import com.okdk.board.entity.User;
 import com.okdk.board.repository.UserRepository;
+import com.okdk.board.util.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,31 +27,42 @@ public class UserService {
     //private final SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmssSSS");
     // Java 8 이상에서는 DateTimeFormatter를 사용
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+    private final JwtUtil jwtUtil;
 
     // 사용자 로그인
     @Transactional
-    public ResponseEntity<HashMap<String, Object>> authenticate(String userId, String userPassword) {
+    public ResponseEntity<HashMap<String, Object>> authenticate(LoginRequest loginRequest) {
         HashMap<String, Object> retMap = new HashMap<String, Object>();
 
-        Optional<User> result = userRepository.findByUserId(userId);
-
-        String resMsg = result
-                .map(user -> {
-                    if (user.getUserPassword().equals(userPassword)) {
-                        retMap.put("resUser", toDto(user)); // User 엔티티를 DTO로 변환
-                        return "SUCCESS"; // 로그인 성공
-                    } else {
-                        return "PASSWORD_INCORRECT"; // 비밀번호 불일치
-                    }
-                })
-                .orElse("USER_NOT_FOUND"); // 사용자 없음
-
-        retMap.put("resMsg", resMsg);
-
-        return ResponseEntity.ok(retMap); // 로그인 성공
+        // 사용자 조회
+        Optional<User> result = userRepository.findByUserId(loginRequest.getUserId());
 
 
+        if (result.isPresent()) {
+            User user = result.get();
 
+            if (user.getUserPassword().equals(loginRequest.getUserPassword())) {
+                // JWT 토큰 생성
+                String token = jwtUtil.generateToken(user.getUserId());
+
+                // 사용자 정보와 성공 메시지 추가
+                retMap.put("resUser", toDto(user)); // User 엔티티를 DTO로 변환
+                retMap.put("resMsg", "SUCCESS"); // 성공 메시지
+
+                // JWT를 헤더에 추가하고 응답 반환
+                return ResponseEntity.ok()
+                        .header("Authorization", "Bearer " + token) // JWT를 헤더에 추가
+                        .body(retMap); // 본문에 메시지와 사용자 정보 포함
+            } else {
+                // 비밀번호 불일치 처리
+                retMap.put("resMsg", "PASSWORD_INCORRECT");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(retMap);
+            }
+        } else {
+            // 사용자 없음 처리
+            retMap.put("resMsg", "USER_NOT_FOUND");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(retMap);
+        }
     }
 
     // 사용자 생성

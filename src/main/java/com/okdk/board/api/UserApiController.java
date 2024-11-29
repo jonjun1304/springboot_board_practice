@@ -1,5 +1,6 @@
 package com.okdk.board.api;
 
+import com.okdk.board.dto.LoginRequest;
 import com.okdk.board.dto.UserDto;
 import com.okdk.board.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class UserApiController {
 
     // 로그인 기능
     @PostMapping("/login")
-    public ResponseEntity<HashMap<String, Object>> login(@RequestBody UserDto userDto) {
-        return userService.authenticate(userDto.getUserId(), userDto.getUserPassword());
+    public ResponseEntity<HashMap<String, Object>> login(@RequestBody LoginRequest loginRequest) {
+        return userService.authenticate(loginRequest);
     }
 
     // ID 중복 체크
